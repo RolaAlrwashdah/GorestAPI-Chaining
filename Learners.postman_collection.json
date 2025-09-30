@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "946cd353-3c46-432d-b951-a44a42e3432f",
+		"name": "Learners",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43215903"
+	},
+	"item": [
+		{
+			"name": "get all learner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"status code is 200\",()=>{\r",
+							"pm.response.to.have.status(200);\r",
+							"\r",
+							"});\r",
+							"pm.test(\"status of get response\",()=>{\r",
+							"pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"///// test header is present \r",
+							"pm.test(\"Content-Type header is present\",()=>{\r",
+							"pm.response.to.have.header(\"Content-Type\");\r",
+							"\r",
+							"})\r",
+							"pm.test(\"Content-Type header is application/json\",()=>{\r",
+							"\r",
+							"pm.expect(pm.response.headers.get('Content-Type')).to.eql(\"application/json\");\r",
+							"\r",
+							"})\r",
+							"    \r",
+							"///// testing cookies\r",
+							"pm.test(\"Check if session cookie exists\", () => {\r",
+							"    pm.expect(pm.cookies.has(\"session_id\")).to.be.true;\r",
+							"});\r",
+							"//// testing response time\r",
+							"pm.test(\"response time is less than 5ms\",()=>{\r",
+							"pm.expect(pm.response.responseTime).to.be.below(5);\r",
+							"\r",
+							"})\r",
+							"//// test all response body \r",
+							"const jsonData= pm.response.json();\r",
+							"\r",
+							"pm.test(\" validate all object in resopnse\",()=>{\r",
+							"\r",
+							"pm.expect(jsonData).to.be.an(\"array\");\r",
+							"jsonData.forEach((item,index)=>{\r",
+							"\r",
+							"pm.expect(item).to.be.an(\"object\");\r",
+							"\r",
+							"pm.expect(item).to.have.property(\"id\");\r",
+							"pm.expect(item.id).to.be.a(\"string\");\r",
+							"\r",
+							"pm.expect(item).to.have.property(\"firstName\");\r",
+							"pm.expect(item.firstName).to.be.a(\"string\");\r",
+							"\r",
+							"pm.expect(item).to.have.property(\"age\");\r",
+							"pm.expect(item.age).to.be.a(\"number\");\r",
+							"pm.expect(item.age).to.be.at.least(18);\r",
+							"\r",
+							"if(item.course){\r",
+							"\r",
+							"    pm.expect( typeof item.course === \"string\" || \r",
+							"                (Array.isArray(item.course) && item.course.every(c => typeof c === \"string\"))\r",
+							"            ).to.be.true;\r",
+							"}\r",
+							"\r",
+							"\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"testing proprieties\",()=>{\r",
+							"\r",
+							"pm.expect(jsonData[1].course).to.include(\"Java\")\r",
+							"\r",
+							"pm.expect(jsonData[0].firstName).to.eql(\"Rola\")\r",
+							"\r",
+							"})\r",
+							"\r",
+							"var schema = {\r",
+							"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"id\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"firstName\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"lastName\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"age\": {\r",
+							"      \"type\": \"number\"\r",
+							"    },\r",
+							"    \"country\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"course\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": {\r",
+							"        \"type\": \"string\"\r",
+							"      },\r",
+							"      \"minItems\": 1\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\"id\", \"firstName\", \"lastName\", \"age\", \"country\", \"course\"]\r",
+							"};\r",
+							"pm.test(\"schema validation\",()=>{\r",
+							"\r",
+							"pm.expect(tv4.validate(jsonData[0],schema)).to.be.true\r",
+							"\r",
+							"\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"reem\",\r\n  \"lastName\": \"Mahmoud\",\r\n  \"age\": 23,\r\n  \"country\": \"Egypt\",\r\n  \"course\":  [\"Python\",\r\n              \"Java\"]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/learners",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"learners"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get single learner",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/learners/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"learners",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new learner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"statue code has created\",()=>{\r",
+							"pm.response.to.have.status(\"Created\");\r",
+							"\r",
+							"\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"reem\",\r\n  \"lastName\": \"Mahmoud\",\r\n  \"age\": 23,\r\n  \"country\": \"Egypt\",\r\n  \"course\":  [\"Python\",\r\n              \"Java\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/learners",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"learners"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update learner",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": \"1\",\r\n        \"firstName\": \"Rola\",\r\n        \"lastName\": \"Alrwashdah\",\r\n        \"age\": 22,\r\n        \"country\": \"Jordan\",\r\n        \"course\": [\"C#\",\"JS\"]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/learners/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"learners",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete learner",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/learners/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"learners",
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
